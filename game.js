@@ -23,36 +23,41 @@ let score = 0;
 let scoreText;
 
 function preload() {
-    // Load images for the game
+    this.load.image('background', 'background.png');
+    this.load.image('ground', 'ground.png');
     this.load.image('cat', 'cat.png');
     this.load.image('coin', 'coin.png');
-    this.load.image('ground', 'ground.png');
 }
 
+
 function create() {
-    // Add background ground image
-    this.add.image(400, 300, 'ground');
-    
-    // Add the cat character, make sure it stays inside the screen
+    // Add background image (make sure it's centered and properly scaled)
+    this.add.image(400, 300, 'background').setScale(1);
+
+    // Add the ground
+    this.add.image(400, 550, 'ground');
+
+    // Add the cat
     cat = this.physics.add.sprite(100, 450, 'cat').setCollideWorldBounds(true);
-    
-    // Create coins for the cat to collect
+
+    // Create coins
     coins = this.physics.add.group({ key: 'coin', repeat: 10, setXY: { x: 100, y: 0, stepX: 70 } });
-    
-    // Make the coins bounce a little
+
+    // Make coins bounce a little
     coins.children.iterate(coin => {
         coin.setBounceY(Phaser.Math.FloatBetween(0.2, 0.5));
     });
-    
-    // Check when the cat touches a coin
+
+    // Add overlap detection
     this.physics.add.overlap(cat, coins, collectCoin, null, this);
-    
-    // Allow arrow keys to control the cat
+
+    // Allow arrow keys
     cursors = this.input.keyboard.createCursorKeys();
-    
-    // Display the score
+
+    // Display score
     scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#fff' });
 }
+
 
 function update() {
     // Move the cat left or right using arrow keys
