@@ -25,11 +25,18 @@ function preload() {
     this.load.image('ground', 'ground.png');
     this.load.image('cat', 'cat.png');
     this.load.image('coin', 'coin.png');
+
+this.load.once('complete', () => {
+    console.log('Loaded cat:', this.textures.get('cat').getSourceImage().width, 'x', this.textures.get('cat').getSourceImage().height);
+});
+
 }
 
 function create() {
     // Background image
     this.add.image(400, 300, 'background').setDepth(-1); // Ensure it stays behind everything
+    this.add.image(400, 300, 'background').setDisplaySize(800, 600); // Stretches to fit canvas
+
 
     // Ground image (for aesthetics only, not solid)
     this.add.image(400, 550, 'ground');
@@ -38,6 +45,8 @@ function create() {
     cat = this.physics.add.sprite(100, 450, 'cat');
     cat.setCollideWorldBounds(true);
     cat.setBounce(0.1);
+    cat = this.physics.add.sprite(100, 450, 'cat').setScale(0.25); // Try 0.25 or 0.5
+    
 
     // Create coins
     coins = this.physics.add.group({
@@ -45,6 +54,7 @@ function create() {
         repeat: 10,
         setXY: { x: 100, y: 0, stepX: 70 }
     });
+    
 
     coins.children.iterate((coin) => {
         coin.setBounceY(Phaser.Math.FloatBetween(0.2, 0.5));
